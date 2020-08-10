@@ -1,0 +1,104 @@
+<%- include('../header') -%>
+<body style="margin: 0;padding: 0;">
+	<div class="container-fluid bg-light pt-5 pl-5 pr-5" style="height: 100vh;">
+		<div class="row bg-white">
+			<div class="col-sm p-5" id="app">
+				<div class="row">
+					<div class="col mb-3">
+						<a href="/"><button class="btn btn-info" style="float: right;">Search Page</button></a>
+					</div>
+				</div>
+				<form action='/gitsearch' method='GET' id='git_search_submit_form'>
+					<input type="hidden" id="search_page_num" name='current_page_num' v-model="searchPageNum">
+					<input type="hidden" id="search_value" name="search_value" v-model="searchVal">
+				</form>
+				<form action='/reports/list' method='GET' id='git_search_report_submit_form'>
+					<input type="hidden" id="current_page_num" name='current_page_num'  v-model="currentPage">
+					<div class="row mb-3">
+						<div class="col"></div>
+						<div class="col"></div>
+						<div class="col">
+							<label>Entries: {{ totalCount }}</label>
+						</div>
+					</div>
+				</form>
+				<table class="table table-striped" v-if="responseDatas.length != 0">
+					<thead>
+						<tr>
+							<th scope="col">#</th>
+							<th scope="col">Search Value</th>
+							<th scope="col">Page</th>
+							<th scope="col">Link</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr v-for="(dat, index) in responseDatas">
+							<th scope="row">{{ ((currentPage-1)*takeCount)+(index+1) }}</th>
+							<td>{{ dat.searchValue }}</td>
+							<td>{{ dat.currentPage }}</td>
+							<td><a style="cursor: pointer;color: #0056b3;" v-on:click="fetchSearchValues(dat.searchValue,dat.currentPage)">Click Here</a></td>
+						</tr>
+					</tbody>
+				</table>
+				<nav aria-label="Pagination" v-if="totalPages != 0">
+					<ul class="pagination justify-content-end">
+						<li class="page-item" v-if="currentPage > 2"><a class="page-link" v-on:click="filterWithPageNum(1)">1</a></li>
+						
+						<li class="page-item" v-if="currentPage != 1"><a class="page-link" v-on:click="filterWithPageNum(previousPage)">{{ previousPage }}</a></li>
+
+						<li class="page-item active"><a class="page-link" v-on:click="filterWithPageNum(currentPage)">{{ currentPage }}<span class="sr-only">(current)</span></a></li>
+
+						<li class="page-item" v-if="currentPage != totalPages"><a class="page-link" v-on:click="filterWithPageNum(nextPage)">{{ nextPage }}</a></li>
+
+						<li class="page-item" v-if="(totalPages - currentPage) >= 2"><a class="page-link" v-on:click="filterWithPageNum(totalPages)">{{ totalPages }}</a></li>
+					</ul>
+				</nav>
+				<div class="text-center" v-else>
+					<label class="text-danger">No data</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<%- include('../footer-script') -%>
+	<script>
+		var tempData = <%- JSON.stringify(data) %>;
+		var app = new Vue( {
+			el: '#app',
+			data: {
+				totalCount: <%= totalCount %>,
+				totalPages: <%=totalPages %>,
+				takeCount: <%=takeCount %>,
+				currentPage: <%=currentPage %>,
+				searchVal: "",
+				searchPageNum: 1,
+				responseDatas: tempData
+			},
+			methods: {
+				fetchSearchValues(searchVal, pageVal) {
+					this.searchVal = searchVal;
+					this.searchPageNum = pageVal;
+					setTimeout(function() {
+						document.getElementById('git_search_submit_form').submit();
+					}, 500);
+				},
+				filterWithPageNum(page_num) {
+					this.currentPage = page_num;
+					setTimeout(function() {
+						document.getElementById('git_search_report_submit_form').submit();
+					}, 500);
+				}
+			},
+			computed: {
+				previousPage() {
+
+					return this.currentPage - 1;
+				},
+				nextPage() {
+
+					return this.currentPage + 1;
+				}
+			}
+		});
+	</script>
+</body>
+</html>

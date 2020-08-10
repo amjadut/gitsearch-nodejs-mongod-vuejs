@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Git Search</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body style="margin: 0;padding: 0;">
+	<div class="container-fluid bg-light pt-5 pl-5 pr-5" style="height: 100vh;">
+		<div class="row bg-white">
+			<div class="col-sm p-5">
+				<div class="text-center">
+					<h1><%= message %></h1>
+					<label><%=error.status %></label>
+					<pre><%=error.stack %></pre>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script>
+	function filterWithPageNum(page_num) {
+		$("#current_page_num").val(page_num);
+		$("#git_search_report_submit_form").submit();
+	}
+
+	function fetchSearchValues(searchVal,PageVal) {
+		$("#search_value").val(searchVal);
+		$("#search_page_num").val(PageVal);
+		$("#git_search_submit_form").submit();
+	}
+	</script>
+</body>
+</html>
