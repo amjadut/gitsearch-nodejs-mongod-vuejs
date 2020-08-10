@@ -2,6 +2,6 @@
 Git repository search based on topics using Nodejs, MongoDB, Vue js
 
 
-After cloning run below code for starting the website:
+After cloning run below command for starting the website:
 
 SET DEBUG=project-name:* & npm start
