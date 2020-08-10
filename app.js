@@ -5,7 +5,10 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongo = require('mongodb');
 
+// routes for git search
 var indexRouter = require('./routes/index');
+
+// routes for search report
 var reportsRouter = require('./routes/reports');
 
 var app = express();

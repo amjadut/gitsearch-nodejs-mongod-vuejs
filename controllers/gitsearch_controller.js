@@ -5,8 +5,10 @@ exports.performGitSearch = function(reqObj,renderResponse) {
 	MongoClient.connect(url, function(err, db) {
 		if (err) throw err;
 		var dbo = db.db("gitsearch");
+		/* Find the object in the collection */
 		dbo.collection("gitsearch").findOne(dataFind).then(result => {
 			if(result) {
+				/* If object is there in the collection then render the page with that data */
 				var totalPages = 1;
 				if (result.totalCount!=0) {
 					if (result.totalCount%result.takeCount==0) {
@@ -21,6 +23,7 @@ exports.performGitSearch = function(reqObj,renderResponse) {
 				renderResponse.render('git_search/gitsearch',{totalCount: result.totalCount, totalPages: totalPages, takeCount: result.takeCount, currentPage: result.currentPage, searchValue: result.searchValue, data: result.results, errorMessage: ''});
 			}
 			else {
+				/* If object is not available in the collection then using git API get the repository details */
 				var https = require('https');
 				var querystring = require('querystring');
 				var host = 'api.github.com';
@@ -60,6 +63,7 @@ exports.performGitSearch = function(reqObj,renderResponse) {
 								}
 							}
 							var newObj = {username: 'amjad', totalCount: responseDataTemp.total_count, takeCount: takeCountVal, searchValue: reqObj.query.search_value, currentPage: reqObj.query.current_page_num, results: responseDataTemp.items};
+							/* If data is available then save that to the collection and then render the page */
 							dbo.collection("gitsearch").insertOne(newObj, function(err, resp) {
 								if (err) throw err;
 
@@ -69,6 +73,7 @@ exports.performGitSearch = function(reqObj,renderResponse) {
 							renderResponse.render('git_search/gitsearch',{totalCount: responseDataTemp.total_count, totalPages: totalPages, takeCount: takeCountVal, currentPage: reqObj.query.current_page_num, searchValue: reqObj.query.search_value, data: responseDataTemp.items, errorMessage: ''});
 						}
 						else {
+							/* If data is not available then render the page with the error message from git API response */
 
 							renderResponse.render('git_search/gitsearch',{totalCount: 0, totalPages: 0, takeCount: 30, currentPage: 1, searchValue: reqObj.query.search_value, data: [], errorMessage: responseDataTemp.message});
 						}

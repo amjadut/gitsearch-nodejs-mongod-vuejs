@@ -4,7 +4,7 @@ var gitsearch_reports_controller = require('../controllers/gitsearch_reports_con
 const bodyParser = require('body-parser');
 var urlencodedParser = bodyParser.urlencoded({ extended: false });
 
-/* GET search listing. */
+/* GET search reports. */
 router.get('/list', urlencodedParser, function (req, res) {
 	gitsearch_reports_controller.gitSearchReportAction(req,res);
 });

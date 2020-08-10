@@ -11,16 +11,18 @@ exports.gitSearchReportAction = function(reqObj,renderResponse) {
 		}
 		var take_count = 30;
 		var skip_count = (page_num - 1) * take_count;
-
+		/* Find the count of search results in the collection */
 		dbo.collection("gitsearch").count(dataFind, function(err, result) {
 			if (err) throw err;
 
 			var totalCount = result;
 			if (totalCount == 0) {
+				/* If count is zero then render the page with default data */
 
 				renderResponse.render('reports/gitsearch_report',{totalCount: totalCount, totalPages: 1, takeCount: take_count, currentPage: page_num, data: []});
 			}
 			else {
+				/* If count is non-zero then using skip and limit take paginated data and render the page */
 				dbo.collection("gitsearch").find(dataFind,{ projection: { _id: 0, username: 1, totalCount: 1, takeCount: 1, searchValue: 1, currentPage: 1 } }).skip(skip_count).limit(take_count).toArray(function(err, reportResponse) {
 					if (err) throw err;
 					if (reportResponse) {
