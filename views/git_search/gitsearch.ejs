@@ -9,7 +9,7 @@
 					</div>
 				</div>
 				<form action='/gitsearch' method='GET' id='git_search_submit_form'>
-					<input type="hidden" id="current_page_num" name='current_page_num' v-model="currentPage">
+					<input type="hidden" id="current_page_num" name='current_page_num' v-model="filterPageNum">
 					<div class="row mb-3">
 						<div class="col"></div>
 						<div class="col"></div>
@@ -73,6 +73,7 @@
 				searchValue: "<%=searchValue %>",
 				errorMessage: "<%=errorMessage %>",
 				validationErrorMsg: "",
+				filterPageNum: <%=currentPage %>,
 				responseDatas: tempData
 			},
 			methods: {
@@ -85,7 +86,7 @@
 					}
 				},
 				filterWithPageNum(page_num) {
-					this.currentPage = page_num;
+					this.filterPageNum = page_num;
 					setTimeout(function() {
 						document.getElementById('git_search_submit_form').submit();
 					}, 500);
